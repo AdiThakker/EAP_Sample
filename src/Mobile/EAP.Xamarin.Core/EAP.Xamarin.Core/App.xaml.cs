@@ -1,7 +1,9 @@
-﻿using Xamarin.Forms.Xaml;
+﻿using System;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace Xamarin.Forms.Core
+namespace EAP.Xamarin.Core
 {
     public partial class App : Application
     {
@@ -9,7 +11,7 @@ namespace Xamarin.Forms.Core
         {
             InitializeComponent();
 
-            // MainPage = new MainPage();
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()
