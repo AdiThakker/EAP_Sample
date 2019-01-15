@@ -10,7 +10,6 @@ namespace EAP.Xamarin.Core
         public App()
         {
             InitializeComponent();
-
             MainPage = new MainPage();
         }
 
