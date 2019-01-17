@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAP.Xamarin.Core.Android", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EAP.Xamarin.Core", "src\Mobile\EAP.Xamarin.Core\EAP.Xamarin.Core\EAP.Xamarin.Core.csproj", "{62D19342-B6BC-4AEB-87F0-42D49340B767}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAP.Xamarin.Service", "src\Mobile\EAP.Xamarin.Core\EAP.Xamarin.Service\EAP.Xamarin.Service.csproj", "{EDF04E0D-8490-4696-9940-688F098CAF87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{62D19342-B6BC-4AEB-87F0-42D49340B767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62D19342-B6BC-4AEB-87F0-42D49340B767}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62D19342-B6BC-4AEB-87F0-42D49340B767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDF04E0D-8490-4696-9940-688F098CAF87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDF04E0D-8490-4696-9940-688F098CAF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDF04E0D-8490-4696-9940-688F098CAF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDF04E0D-8490-4696-9940-688F098CAF87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,6 +41,7 @@ Global
 		{72BB4D96-D878-425B-83C7-137670C465C1} = {DD3097BC-3FD5-40E6-A5A6-4E2601AC135C}
 		{C5D971F5-1C4A-4931-B2C0-8B93E5077967} = {72BB4D96-D878-425B-83C7-137670C465C1}
 		{62D19342-B6BC-4AEB-87F0-42D49340B767} = {72BB4D96-D878-425B-83C7-137670C465C1}
+		{EDF04E0D-8490-4696-9940-688F098CAF87} = {72BB4D96-D878-425B-83C7-137670C465C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7BA36E05-8414-450B-A07E-1DCC7F849EF8}

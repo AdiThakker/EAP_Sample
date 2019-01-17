@@ -96,6 +96,10 @@
       <Project>{62d19342-b6bc-4aeb-87f0-42d49340b767}</Project>
       <Name>EAP.Xamarin.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EAP.Xamarin.Service\EAP.Xamarin.Service.csproj">
+      <Project>{EDF04E0D-8490-4696-9940-688F098CAF87}</Project>
+      <Name>EAP.Xamarin.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />

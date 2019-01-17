@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using EAP.Xamarin.Service;
 
 namespace EAP.Xamarin.Core.Droid
 {
@@ -15,7 +16,7 @@ namespace EAP.Xamarin.Core.Droid
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App());
+            LoadApplication(new App(new EAPService()));
         }
     }
 }
