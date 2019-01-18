@@ -1,4 +1,5 @@
 ﻿
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -15,8 +16,9 @@ namespace EAP.Xamarin.Core.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            UserDialogs.Init(this);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App(new EAPService()));
+            LoadApplication(new App(new EAPService(new AppConfiguration().GetConnectionUri())));
         }
     }
 }
