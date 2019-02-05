@@ -25,5 +25,26 @@ namespace EAP.Xamarin.Service
         {
             throw new NotImplementedException();
         }
+
+        private Task<TResult> RunAsAsync<TResult>(Func<TResult> getData)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    // TODO:  Setup connection params
+                    return getData();
+                }
+                catch (Exception)
+                {
+                    // Logic
+                    throw;
+                }
+                finally
+                {
+                    // Clean up
+                }
+            });
+        }
     }
 }
