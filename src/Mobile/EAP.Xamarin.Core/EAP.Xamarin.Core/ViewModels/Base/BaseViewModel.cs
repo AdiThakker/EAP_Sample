@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
+using System.Threading.Tasks;
 using EAP.Xamarin.Core.Services;
 using EAP.Xamarin.Core.Utilities;
 
@@ -39,6 +39,11 @@ namespace EAP.Xamarin.Core.ViewModels.Base
         public BaseViewModel()
         {
             DataService = AppContainer.Resolve<IDataService>();
+        }
+
+        public virtual Task InitializeAsync(object data)
+        {
+            return Task.FromResult(false);
         }
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
