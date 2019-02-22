@@ -1,0 +1,205 @@
+pool:
+
+  vmImage: Hosted VS2017
+
+  demands:
+
+  - MSBuild
+
+  - Xamarin.Android
+
+  - msbuild
+
+  - vstest
+
+
+
+#Your build pipeline references an undefined variable named ‘Parameters.restorePkgSolution’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+variables:
+
+  BuildConfiguration: 'Release'
+
+
+
+steps:
+
+- task: NuGetToolInstaller@0
+
+  displayName: 'Use NuGet 4.4.1'
+
+  inputs:
+
+    versionSpec: 4.4.1
+
+
+
+- task: NuGetCommand@2
+
+  displayName: 'NuGet restore'
+
+  inputs:
+
+    restoreSolution: '$(Parameters.restorePkgSolution)'
+
+
+
+- task: colinsalmcorner.colinsalmcorner-buildtasks.version-assemblies-task.VersionAssemblies@2
+
+  displayName: 'Version Assemblies using **\AssemblyInfo.* : Core'
+
+  inputs:
+
+    sourcePath: SE.Core
+
+    versionFormat: threeParts
+
+    replaceVersionFormat: threeParts
+
+
+
+- task: colinsalmcorner.colinsalmcorner-buildtasks.version-assemblies-task.VersionAssemblies@2
+
+  displayName: 'Version Assemblies using **\AssemblyInfo.* : Droid '
+
+  inputs:
+
+    sourcePath: SE.DW.Droid/Properties
+
+    versionFormat: threeParts
+
+    replaceVersionFormat: threeParts
+
+
+
+- task: XamarinAndroid@1
+
+  displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
+
+  inputs:
+
+    projectFile: '**/*Droid*.csproj'
+
+    outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+    configuration: '$(BuildConfiguration)'
+
+    createAppPackage: false
+
+
+
+- task: MSBuild@1
+
+  displayName: 'Build Unit Test Project'
+
+  inputs:
+
+    solution: '**/*unittest*.csproj'
+
+    configuration: '$(BuildConfiguration)'
+
+    msbuildArguments: '/p:OutputPath="$(build.binariesdirectory)/$(BuildConfiguration)/test-assembly"'
+
+
+
+- task: VSTest@2
+
+  displayName: 'Run Unit Tests'
+
+  inputs:
+
+    testAssemblyVer2: |
+     **\*UnitTest*.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
+
+    searchFolder: '$(build.binariesdirectory)/$(BuildConfiguration)/test-assembly'
+
+
+
+- task: CopyFiles@2
+
+  displayName: 'Copy nuspec File to Binaries directory : Core'
+
+  inputs:
+
+    SourceFolder: SE.Core
+
+    Contents: '*.nuspec'
+
+    TargetFolder: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+    OverWrite: true
+
+
+
+- task: CopyFiles@2
+
+  displayName: 'Copy nuspec File to Binaries directory : Droid'
+
+  inputs:
+
+    SourceFolder: SE.DW.Droid
+
+    Contents: '*.nuspec'
+
+    TargetFolder: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+    OverWrite: true
+
+
+
+- task: NuGetCommand@2
+
+  displayName: 'NuGet pack : Core'
+
+  inputs:
+
+    command: pack
+
+    packagesToPack: Path_To.nuspec
+
+    versioningScheme: byBuildNumber
+
+
+
+- task: NuGetCommand@2
+
+  displayName: 'NuGet pack : Droid'
+
+  inputs:
+
+    command: pack
+
+    packagesToPack: Path_To.nuspec
+
+    versioningScheme: byBuildNumber
+
+
+
+- task: CopyFiles@2
+
+  displayName: 'Copy Droid NuGet Pkg file'
+
+  inputs:
+
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+
+    Contents: '*.nupkg'
+
+    TargetFolder: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+    OverWrite: true
+
+
+
+- task: PublishBuildArtifacts@1
+
+  displayName: 'Publish Artifact: drop'
+
+  inputs:
+
+    PathtoPublish: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+
+

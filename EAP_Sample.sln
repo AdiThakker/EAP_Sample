@@ -22,6 +22,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cloud", "Cloud", "{5417B480
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebClient", "src\SPA\WebClient\WebClient.csproj", "{801139EF-508C-4AD2-8F06-91A07802D3E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevOps", "DevOps", "{182E2738-E787-4E5E-8A33-AE1C3184FBEE}"
+	ProjectSection(SolutionItems) = preProject
+		src\Mobile\DevOps\Build-Android-NuGet.yml = src\Mobile\DevOps\Build-Android-NuGet.yml
+		src\Mobile\DevOps\Build-Android.yml = src\Mobile\DevOps\Build-Android.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +64,7 @@ Global
 		{05F92062-26E8-4CDC-A743-60C8A69924E8} = {DD3097BC-3FD5-40E6-A5A6-4E2601AC135C}
 		{5417B480-FE81-476E-8D41-D380E586E9C7} = {DD3097BC-3FD5-40E6-A5A6-4E2601AC135C}
 		{801139EF-508C-4AD2-8F06-91A07802D3E9} = {05F92062-26E8-4CDC-A743-60C8A69924E8}
+		{182E2738-E787-4E5E-8A33-AE1C3184FBEE} = {72BB4D96-D878-425B-83C7-137670C465C1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7BA36E05-8414-450B-A07E-1DCC7F849EF8}

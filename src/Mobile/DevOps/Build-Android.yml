@@ -1,0 +1,209 @@
+pool:
+
+  vmImage: Hosted VS2017
+
+  demands:
+
+  - MSBuild
+
+  - Xamarin.Android
+
+  - msbuild
+
+  - vstest
+
+  - JDK
+
+
+
+#Your build pipeline references an undefined variable named ‘Parameters.restorePkgSolution’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+#Your build pipeline references an undefined variable named ‘Parameters.keystorePass’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+#Your build pipeline references an undefined variable named ‘Parameters.keyPass’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab. See https://go.microsoft.com/fwlink/?linkid=865972
+
+variables:
+
+  BuildConfiguration: 'Release'
+
+
+
+steps:
+
+- task: NuGetToolInstaller@0
+
+  displayName: 'Use NuGet 4.4.1'
+
+  inputs:
+
+    versionSpec: 4.4.1
+
+
+
+- task: NuGetCommand@2
+
+  displayName: 'NuGet restore'
+
+  inputs:
+
+    restoreSolution: '$(Parameters.restorePkgSolution)'
+
+    vstsFeed: '60db285d-912a-45c7-9582-080a68e458c2'
+
+
+
+- task: colinsalmcorner.colinsalmcorner-buildtasks.replace-tokens-task.ReplaceTokens@1
+
+  displayName: 'Replace tokens in Config.Json file'
+
+  inputs:
+
+    filePattern: '**\*Config.json'
+
+
+
+- task: colinsalmcorner.colinsalmcorner-buildtasks.version-assemblies-task.VersionAssemblies@2
+
+  displayName: 'Version Assemblies using **\AssemblyInfo.*'
+
+  inputs:
+
+    sourcePath: LT/LT.Android/Properties
+
+    versionFormat: threeParts
+
+    replaceVersionFormat: threeParts
+
+
+
+- task: colinsalmcorner.colinsalmcorner-buildtasks.version-assemblies-task.VersionAssemblies@2
+
+  displayName: 'Update Version Code using **\AndroidManifest.*'
+
+  inputs:
+
+    sourcePath: LT/LT.Android/Properties
+
+    filePattern: '**\AndroidManifest.*'
+
+    versionFormat: custom
+
+    customBuildRegex: '(?:\d+\.\d+\.)(\d+)  '
+
+    replaceVersionFormat: custom
+
+    customReplaceRegex: 'versionCode="\d+'
+
+    buildRegexIndex: 1
+
+    replacePrefix: 'versionCode="'
+
+
+
+- task: colinsalmcorner.colinsalmcorner-buildtasks.version-assemblies-task.VersionAssemblies@2
+
+  displayName: 'Update Version Name using **\AndroidManifest.*'
+
+  inputs:
+
+    sourcePath: LT/LT.Android/Properties
+
+    filePattern: '**\AndroidManifest.*'
+
+    versionFormat: threeParts
+
+    replaceVersionFormat: custom
+
+    customReplaceRegex: 'versionName="\d+\.\d+\.\d+'
+
+    replacePrefix: 'versionName="'
+
+
+
+- task: XamarinAndroid@1
+
+  displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
+
+  inputs:
+
+    projectFile: '**/*Droid*.csproj'
+
+    outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+    configuration: '$(BuildConfiguration)'
+
+    clean: true
+
+
+
+- task: MSBuild@1
+
+  displayName: 'Build Unit Test Project'
+
+  inputs:
+
+    solution: '**/*unittest*.csproj'
+
+    configuration: '$(BuildConfiguration)'
+
+    msbuildArguments: '/p:OutputPath="$(build.binariesdirectory)/$(BuildConfiguration)/test-assembly"'
+
+
+
+- task: VSTest@2
+
+  displayName: 'Run Unit Tests'
+
+  inputs:
+
+    testAssemblyVer2: |
+     **\*UnitTest*.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
+
+    searchFolder: '$(build.binariesdirectory)/$(BuildConfiguration)/test-assembly'
+
+    codeCoverageEnabled: true
+
+
+
+- task: AndroidSigning@3
+
+  displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+
+  inputs:
+
+    apkFiles: '$(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+
+    apksignerKeystoreFile: ''
+
+    apksignerKeystorePassword: '$(Parameters.keystorePass)'
+
+    apksignerKeystoreAlias: ' MobilityKey'
+
+    apksignerKeyPassword: '$(Parameters.keyPass)'
+
+
+
+- task: CopyFiles@2
+
+  displayName: 'Copy Android apk file to Publish'
+
+  inputs:
+
+    SourceFolder: '$(build.binariesdirectory)/$(BuildConfiguration)'
+
+    Contents: '*.apk'
+
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    CleanTargetFolder: true
+
+
+
+- task: PublishBuildArtifacts@1
+
+  displayName: 'Publish Artifact: drop'
+
+
+
